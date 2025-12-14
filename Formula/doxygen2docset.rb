@@ -24,7 +24,7 @@ class Doxygen2docset < Formula
   end
 
   def install
-    bin.install "bin/doxygen2docset"
+    bin.install "doxygen2docset"
   end
 
   test do
