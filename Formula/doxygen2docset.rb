@@ -1,5 +1,5 @@
 class Doxygen2docset < Formula
-  desc "From Doxygen documentation, create a Docset for use in Dash or Zeal."
+  desc "From Doxygen documentation, create a Docset for use in Dash or Zeal"
   homepage "https://github.com/chinmaygarde/doxygen2docset"
   version "0.2.2"
 
@@ -28,6 +28,6 @@ class Doxygen2docset < Formula
   end
 
   test do
-    system "#{bin}/doxygen2docset", "--help"
+    system "bin/doxygen2docset22", "--help"
   end
 end
