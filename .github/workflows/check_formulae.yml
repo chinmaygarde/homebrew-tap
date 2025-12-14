@@ -1,50 +1,44 @@
-name: Check Formulae
+name: Homebrew test-bot
 
 on:
-  push:
   pull_request:
+  push:
 
 jobs:
-  test-formula:
-    name: ${{ matrix.os }} / ${{ matrix.formula }}
+  test-bot:
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - macos-latest
-          - ubuntu-latest
-        formula:
-          - doxygen2docset
+        os: [macos-latest, ubuntu-latest]
+
     env:
       HOMEBREW_NO_ANALYTICS: "1"
-      HOMEBREW_NO_INSTALL_CLEANUP: "1"
       HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+
+      # Arbitrary local tap name for the PR workspace
+      TAP_NAME: "ci/localtap"
 
     steps:
-      - name: Checkout tap repository
+      - name: Checkout (PR contents)
         uses: actions/checkout@v4
 
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Show Homebrew config
+      # Register the PR workspace as a tap
+      - name: Tap workspace
         run: |
-          brew --version
-          brew config
+          brew tap --force-auto-update "$TAP_NAME" "$GITHUB_WORKSPACE"
+          brew tap | grep -F "$TAP_NAME"
 
-      - name: Tap this repository
+      # Run the full Homebrew pipeline
+      - name: Run brew test-bot
         run: |
-          brew tap --force-auto-update "$GITHUB_REPOSITORY" "$GITHUB_WORKSPACE"
-
-      - name: Audit formula
-        run: |
-          brew audit --formula --strict "$GITHUB_REPOSITORY/${{ matrix.formula }}"
-
-      - name: Install formula
-        run: |
-          brew install --verbose --debug "$GITHUB_REPOSITORY/${{ matrix.formula }}"
-
-      - name: Run formula test
-        run: |
-          brew test "$GITHUB_REPOSITORY/${{ matrix.formula }}"
+          brew test-bot \
+            --tap="$TAP_NAME" \
+            --only-formulae \
+            --root-url="https://example.invalid"
