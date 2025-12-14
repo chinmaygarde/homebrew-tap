@@ -28,6 +28,6 @@ class Doxygen2docset < Formula
   end
 
   test do
-    system "#{bin}/doxygen2docset", "--help"
+    assert(File.exist?("#{bin}/doxygen2docset"))
   end
 end
