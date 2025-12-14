@@ -22,26 +22,27 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: "1"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout tap repository
+        uses: actions/checkout@v4
 
-      # Ensures Homebrew exists on both macOS and Linux runners
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Show brew config
+      - name: Show Homebrew config
         run: |
           brew --version
           brew config
 
-      # Lints the formula (use --online if you want extra checks; it does network I/O)
-      - name: Audit formula
-        run: |
-          brew audit --formula --strict Formula/${{ matrix.formula }}.rb
-
-      # Tap *this* repo from the workspace, then install the formula
-      - name: Tap and install
+      - name: Tap this repository
         run: |
           brew tap --force-auto-update "$GITHUB_REPOSITORY" "$GITHUB_WORKSPACE"
+
+      - name: Audit formula
+        run: |
+          brew audit --formula --strict "$GITHUB_REPOSITORY/${{ matrix.formula }}"
+
+      - name: Install formula
+        run: |
           brew install --verbose --debug "$GITHUB_REPOSITORY/${{ matrix.formula }}"
 
       - name: Run formula test
