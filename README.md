@@ -1,18 +1,21 @@
 # Chinmay's Homebrew Tap
 
-## How do I install these formulae?
+## Usage
 
-`brew install chinmayarde/tap/<formula>`
+### Tap and Install New Packages
+```sh
+brew tap chinmayarde/tap
+brew install doxygen2docset
+```
+### Install Package Directly
 
-Or `brew tap chinmayarde/tap` and then `brew install <formula>`.
-
-Or, in a `brew bundle` `Brewfile`:
-
-```ruby
-tap "chinmayarde/tap"
-brew "<formula>"
+```sh
+brew install chinmayarde/tap/doxygen2docset
 ```
 
-## Documentation
+### Use in a `brew bundle` `Brewfile`
 
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
+```sh
+tap "chinmayarde/tap"
+brew "doxygen2docset"
+```
