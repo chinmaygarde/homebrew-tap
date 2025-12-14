@@ -1,0 +1,49 @@
+name: Check Formulae
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-formula:
+    name: ${{ matrix.os }} / ${{ matrix.formula }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+        formula:
+          - doxygen2docset
+    env:
+      HOMEBREW_NO_ANALYTICS: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ensures Homebrew exists on both macOS and Linux runners
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Show brew config
+        run: |
+          brew --version
+          brew config
+
+      # Lints the formula (use --online if you want extra checks; it does network I/O)
+      - name: Audit formula
+        run: |
+          brew audit --formula --strict Formula/${{ matrix.formula }}.rb
+
+      # Tap *this* repo from the workspace, then install the formula
+      - name: Tap and install
+        run: |
+          brew tap --force-auto-update "$GITHUB_REPOSITORY" "$GITHUB_WORKSPACE"
+          brew install --verbose --debug "$GITHUB_REPOSITORY/${{ matrix.formula }}"
+
+      - name: Run formula test
+        run: |
+          brew test "$GITHUB_REPOSITORY/${{ matrix.formula }}"
