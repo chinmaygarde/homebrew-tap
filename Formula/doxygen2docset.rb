@@ -28,6 +28,6 @@ class Doxygen2docset < Formula
   end
 
   test do
-    assert(File.exist?("#{bin}/doxygen2docset"))
+    assert_path_exists("#{bin}/doxygen2docset"))
   end
 end
