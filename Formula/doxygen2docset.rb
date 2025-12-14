@@ -28,6 +28,6 @@ class Doxygen2docset < Formula
   end
 
   test do
-    system "doxygen2docset", "--help"
+    system "#{bin}/doxygen2docset", "--help"
   end
 end
