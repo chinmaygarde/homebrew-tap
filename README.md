@@ -1,5 +1,7 @@
 # Chinmay's Homebrew Tap
 
+[![Tap](https://github.com/chinmaygarde/homebrew-tap/actions/workflows/tests.yml/badge.svg?branch=main&event=push)](https://github.com/chinmaygarde/homebrew-tap/actions/workflows/tests.yml)
+
 ## Usage
 
 ### Tap and Install New Packages
