@@ -5,6 +5,8 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   test-bot:
@@ -13,10 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-22.04
-          - ubuntu-22.04-arm
           - macos-15
           - macos-15-intel
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
     runs-on: ${{ matrix.os }}
     permissions:
       actions: read
